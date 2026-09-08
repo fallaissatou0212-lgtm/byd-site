@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BYD — Be Your Drive | Configure ton volant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg: #0a0a0c;
+--bg-raised: #131316;
+--bg-field: #17171b;
+--blue: #2f7dfa;
+--red: #e8383d;
+--text: #f2f2f0;
+--text-dim: #9a9a9f;
+--line: #232327;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Inter', sans-serif;
+line-height:1.5;
+}
+h1,h2,h3, .display{
+font-family:'Oswald', sans-serif;
+font-weight:600;
+letter-spacing:0.5px;
+text-transform:uppercase;
+}
+a{ color:inherit; text-decoration:none; }
+.wrap{ max-width:1120px; margin:0 auto; padding:0 24px; }
+
+header{
+position:sticky; top:0; z-index:20;
+background:rgba(10,10,12,0.85);
+backdrop-filter:blur(8px);
+border-bottom:1px solid var(--line);
+}
+nav{
+display:flex; align-items:center; justify-content:space-between;
+padding:18px 24px;
+max-width:1120px; margin:0 auto;
+}
+.logo{ font-family:'Oswald'; font-weight:700; font-size:22px; letter-spacing:2px; }
+.logo span{ color:var(--blue); }
+  .logo-img{   height: 40px;   width: auto; }
+.btn{
+display:inline-block;
+padding:13px 28px;
+background:var(--blue);
+color:#fff;
+font-family:'Oswald'; font-weight:600; font-size:14px;
+letter-spacing:0.5px;
+border-radius:2px;
+border:1px solid var(--blue);
+cursor:pointer;
+transition:background .2s, color .2s;
+}
+.btn:hover{ background:transparent; color:var(--blue); }
+
+.hero{
+position:relative;
+padding:90px 24px 70px;
+overflow:hidden;
+border-bottom:1px solid var(--line);
+}
+.hero::before{
+content:"";
+position:absolute; inset:0;
+background:
+radial-gradient(ellipse 500px 400px at 15% 30%, rgba(232,56,61,0.12), transparent 60%),
+radial-gradient(ellipse 600px 500px at 85% 60%, rgba(47,125,250,0.16), transparent 60%);
+pointer-events:none;
+}
+.hero-inner{ position:relative; max-width:620px; }
+.eyebrow{ color:var(--text-dim); font-size:14px; margin-bottom:16px; }
+.hero h1{ font-size:clamp(34px, 5vw, 54px); line-height:1.05; margin-bottom:18px; }
+.hero p{ font-size:16px; color:var(--text-dim); max-width:480px; }
+
+.configurator{ padding:80px 24px 110px; }
+.config-head{ max-width:560px; margin-bottom:48px; }
+.config-head h2{ font-size:30px; margin-bottom:12px; }
+.config-head p{ color:var(--text-dim); font-size:15px; }
+
+form{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:28px 32px;
+background:var(--bg-raised);
+border:1px solid var(--line);
+padding:44px;
+border-radius:4px;
+}
+.field{ display:flex; flex-direction:column; gap:8px; }
+.field.full{ grid-column:1 / -1; }
+label{ font-size:13px; color:var(--text-dim); letter-spacing:0.3px; }
+input[type=text], input[type=number], select, textarea{
+background:var(--bg-field);
+border:1px solid var(--line);
+color:var(--text);
+padding:13px 14px;
+font-family:'Inter';
+font-size:15px;
+border-radius:2px;
+outline:none;
+transition:border-color .2s;
+}
+input:focus, select:focus, textarea:focus{ border-color:var(--blue); }
+textarea{ resize:vertical; min-height:100px; }
+
+fieldset{ border:none; grid-column:1/-1; }
+fieldset legend{ font-size:13px; color:var(--text-dim); margin-bottom:14px; letter-spacing:0.3px; }
+.option-grid{
+display:grid;
+grid-template-columns:repeat(3, 1fr);
+gap:12px;
+}
+.option{ position:relative; }
+.option input{ position:absolute; opacity:0; }
+.option label{
+display:flex; align-items:center; justify-content:center;
+padding:16px 10px;
+border:1px solid var(--line);
+border-radius:2px;
+color:var(--text);
+font-family:'Oswald';
+font-size:14px;
+letter-spacing:0.5px;
+cursor:pointer;
+transition:border-color .2s, background .2s, color .2s;
+text-align:center;
+}
+.option input:checked + label{
+border-color:var(--blue);
+background:rgba(47,125,250,0.12);
+color:var(--blue);
+}
+
+.color-grid{ display:flex; gap:14px; flex-wrap:wrap; }
+.color-option{ position:relative; }
+.color-option input{ position:absolute; opacity:0; }
+.color-option label{
+display:block;
+width:38px; height:38px;
+border-radius:50%;
+border:2px solid var(--line);
+cursor:pointer;
+transition:border-color .2s, transform .2s;
+}
+.color-option input:checked + label{
+border-color:var(--blue);
+transform:scale(1.12);
+}
+.color-option span.name{
+display:block;
+text-align:center;
+font-size:11px;
+color:var(--text-dim);
+margin-top:6px;
+}
+
+.submit-row{ grid-column:1/-1; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+.submit-note{ font-size:13px; color:var(--text-dim); }
+
+@media (max-width:760px){
+form{ grid-template-columns:1fr; padding:28px; }
+.option-grid{ grid-template-columns:repeat(2, 1fr); }
+}
+
+footer{
+border-top:1px solid var(--line);
+padding:32px 24px;
+color:var(--text-dim);
+font-size:13px;
+text-align:center;
+}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+<img src="logofinal.png" alt="BYD - Be Your Drive" class="logo-img">
+<a href="#configurateur" class="btn">Demander un devis</a>
+</nav>
+</header>
+
+<section class="hero">
+<div class="wrap">
+<div class="hero-inner">
+<div class="eyebrow">Volants sport personnalisés</div>
+<h1>Be Your Drive</h1>
+<p>Configure ton volant selon ton véhicule et tes envies. On te fait un devis sur mesure, sans engagement.</p>
+</div>
+</div>
+</section>
+
+<section class="configurator" id="configurateur">
+<div class="wrap">
+<div class="config-head">
+<h2>Configure ton volant</h2>
+<p>Renseigne ton véhicule et tes préférences, on s'occupe du reste et on revient vers toi avec un devis personnalisé.</p>
+</div>
+
+<form id="quoteForm">
+<div class="field">
+<label for="brand">Marque du véhicule</label>
+<input type="text" id="brand" name="brand" placeholder="Ex : BMW" required>
+</div>
+<div class="field">
+<label for="model">Modèle</label>
+<input type="text" id="model" name="model" placeholder="Ex : Série 3" required>
+</div>
+<div class="field">
+<label for="year">Année</label>
+<input type="number" id="year" name="year" placeholder="Ex : 2019" min="1990" max="2030" required>
+</div>
+<div class="field">
+<label for="email">Ton email</label>
+<input type="text" id="email" name="email" placeholder="ton@email.com" required>
+</div>
+
+<fieldset>
+<legend>Matériau</legend>
+<div class="option-grid">
+<div class="option">
+<input type="radio" id="mat-cuir" name="material" value="Cuir" checked>
+<label for="mat-cuir">Cuir</label>
+</div>
+<div class="option">
+<input type="radio" id="mat-alcantara" name="material" value="Alcantara">
+<label for="mat-alcantara">Alcantara</label>
+</div>
+<div class="option">
+<input type="radio" id="mat-carbone" name="material" value="Carbone">
+<label for="mat-carbone">Carbone</label>
+</div>
+</div>
+</fieldset>
+
+<fieldset>
+<legend>Couleur</legend>
+<div class="color-grid">
+<div class="color-option">
+<input type="radio" id="col-noir" name="color" value="Noir" checked>
+<label for="col-noir" style="background:#111"></label>
+<span class="name">Noir</span>
+</div>
+<div class="color-option">
+<input type="radio" id="col-rouge" name="color" value="Rouge">
+<label for="col-rouge" style="background:#e8383d"></label>
+<span class="name">Rouge</span>
+</div>
+<div class="color-option">
+<input type="radio" id="col-bleu" name="color" value="Bleu">
+<label for="col-bleu" style="background:#2f7dfa"></label>
+<span class="name">Bleu</span>
+</div>
+<div class="color-option">
+<input type="radio" id="col-blanc" name="color" value="Blanc">
+<label for="col-blanc" style="background:#f2f2f0"></label>
+<span class="name">Blanc</span>
+</div>
+<div class="color-option">
+<input type="radio" id="col-gris" name="color" value="Gris">
+<label for="col-gris" style="background:#6b6b70"></label>
+<span class="name">Gris</span>
+</div>
+</div>
+</fieldset>
+
+<div class="field full">
+<label for="specifics">Une spécificité à ajouter ? (optionnel)</label>
+<textarea id="specifics" name="specifics" placeholder="Ex : surpiqûres rouges, logo brodé, palettes au volant..."></textarea>
+</div>
+
+<div class="submit-row">
+<button type="submit" class="btn">Envoyer ma demande de devis</button>
+<span class="submit-note" id="formStatus">Réponse sous 48h ouvrées.</span>
+</div>
+</form>
+</div>
+</section>
+
+<footer>
+BYD — Be Your Drive — Personnalisation de volants
+</footer>
+
+<script>
+document.getElementById('quoteForm').addEventListener('submit', function(e){
+e.preventDefault();
+const status = document.getElementById('formStatus');
+status.textContent = "Merci ! Ta demande a bien été enregistrée, on te recontacte sous 48h.";
+status.style.color = "#2f7dfa";
+// Ici, à terme : envoyer les données du formulaire vers un backend / une adresse email
+});
+</script>
+
+</body>
+</html>
